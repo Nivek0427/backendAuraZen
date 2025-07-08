@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Cliente {
+  id            Int      @id @default(autoincrement())
+  nombre        String
+  cel           String
+  correo        String
+  fechaRegistro DateTime
+  citas         Cita[]
+}
+
+model Empleado {
+  id      Int    @id @default(autoincrement())
+  nombre  String
+  cel     String
+  estado  String
+  citas   Cita[]
+}
+
+model Servicio {
+  id          Int      @id @default(autoincrement())
+  nombre      String
+  description String
+  duracion    Int     // en minutos
+  precio      Float
+  citas       Cita[]
+}
+
+model EstadoCita {
+  id     Int    @id @default(autoincrement())
+  nombre String
+  citas  Cita[]
+}
+
+model MetodoPago {
+  id     Int    @id @default(autoincrement())
+  nombre String
+  pagos  Pago[]
+}
+
+model Cita {
+  id         Int        @id @default(autoincrement())
+  clienteId  Int
+  servicioId Int
+  empleadoId Int
+  fecha      DateTime
+  horaInicio DateTime
+  horaFin    DateTime
+  estadoId   Int
+
+  cliente    Cliente    @relation(fields: [clienteId], references: [id])
+  servicio   Servicio   @relation(fields: [servicioId], references: [id])
+  empleado   Empleado   @relation(fields: [empleadoId], references: [id])
+  estado     EstadoCita @relation(fields: [estadoId], references: [id])
+  pagos      Pago[]
+}
+
+model Pago {
+  id         Int         @id @default(autoincrement())
+  citaId     Int
+  metodoId   Int
+  fechaPago  DateTime
+  monto      Float
+
+  cita       Cita        @relation(fields: [citaId], references: [id])
+  metodo     MetodoPago  @relation(fields: [metodoId], references: [id])
+}
