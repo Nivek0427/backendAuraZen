@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import citaRoutes from "./routes/citaRoutes.js";
-import { connect } from "./prismaClient.js";
+import { connect } from "../../db/prismaClient.js";
 
 dotenv.config();
 const app = express();

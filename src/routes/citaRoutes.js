@@ -1,6 +1,6 @@
 import express from "express";
 import { getCitas, updateCita, deleteCita } from "../controllers/citaController.js";
-import prisma from "../db/prismaClient.js"; // importa tu cliente Prisma aquí
+import prisma from "../../db/prismaClient.js"; // importa tu cliente Prisma aquí
 
 const router = express.Router();
 
